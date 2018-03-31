@@ -23,26 +23,29 @@ namespace backend.Controllers
             return db.Users.ToList();
         }
 
-    
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             User user = db.Users.FirstOrDefault(x => x.Id == id);
-            if (user == null)
-                return NotFound();
+    
+            return new ObjectResult(user);
+        }
+
+
+        [HttpGet]
+        [Route("{email}")]
+        public IActionResult GetUserByEmail(string email)
+        {
+            User user = db.Users.FirstOrDefault(x => x.Email == email);
 
             return new ObjectResult(user);
         }
 
- 
-        [HttpPost]
-        public IActionResult Post(User user)
-        {
-            if (user == null)
-            {
-                return BadRequest();
-            }
 
+        [HttpPost]
+        public IActionResult Post([FromBody]User user)
+        {
             db.Users.Add(user);
             db.SaveChanges();
             return Ok(user);

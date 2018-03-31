@@ -33,21 +33,13 @@ namespace backend.Controllers
                 .Include(m => m.User)
                 .FirstOrDefault(x => x.Id == id);
 
-            if (intervalSolution == null)
-                return NotFound();
-
             return new ObjectResult(intervalSolution);
         }
 
   
         [HttpPost]
-        public IActionResult Post(CreateIntervalSolution createIntervalSolution)
+        public IActionResult Post([FromBody]CreateIntervalSolution createIntervalSolution)
         {
-            if (createIntervalSolution == null)
-            {
-                return BadRequest();
-            }
-
             var user = db.Users.FirstOrDefault(data => data.Id == createIntervalSolution.UserId);
 
             IntervalSolution intervalSolution = new IntervalSolution()
@@ -69,6 +61,16 @@ namespace backend.Controllers
             db.Charts.Add(chart);
             db.SaveChanges();
 
+            return Ok(intervalSolution);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            IntervalSolution intervalSolution = db.IntervalSolutions.FirstOrDefault(x => x.Id == id);
+   
+            db.IntervalSolutions.Remove(intervalSolution);
+            db.SaveChanges();
             return Ok(intervalSolution);
         }
     }

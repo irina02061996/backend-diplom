@@ -30,8 +30,6 @@ namespace backend.Controllers
         public IActionResult Get(int id)
         {
             ModifierType modifierType = db.ModifierTypes.FirstOrDefault(x => x.Id == id);
-            if (modifierType == null)
-                return NotFound();
 
             return new ObjectResult(modifierType);
         }
@@ -40,11 +38,6 @@ namespace backend.Controllers
         [HttpPost]
         public IActionResult Post(ModifierType modifierType)
         {
-            if (modifierType == null)
-            {
-                return BadRequest();
-            }
-
             db.ModifierTypes.Add(modifierType);
             db.SaveChanges();
             return Ok(modifierType);
