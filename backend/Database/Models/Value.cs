@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Database.Models
 {
-    public class Value
+    public class Value: IModel
     {
         [Key]
         public int Id { get; set; }

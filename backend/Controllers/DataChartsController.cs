@@ -4,6 +4,7 @@ using System.Linq;
 using backend.Database;
 using backend.Database.CreateModels;
 using backend.Database.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,53 +15,35 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class DataChartsController : Controller
     {
+        IService service;
         ExpertChoiceContext db;
 
         public DataChartsController(ExpertChoiceContext context)
         {
             this.db = context;
+            this.service = new DataChartService(db);
         }
 
 
         [HttpGet]
-        public IEnumerable<DataChart> Get()
+        public IEnumerable<IModel> Get()
         {
-            return db.DataCharts
-                  .Include(c => c.Chart)
-                  .ThenInclude(i => i.IntervalSolution)
-                  .ThenInclude(u => u.User)
-                  .Include(d => d.DemandType)
-                  .Include(m => m.ModifierType)
-                  .ToList();
+            return service.GetAll();
         }
 
   
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            DataChart dataChart = db.DataCharts
-                .Include(c => c.Chart)
-                .ThenInclude(i => i.IntervalSolution)
-                .ThenInclude(u => u.User)
-                .Include(d => d.DemandType)
-                .Include(m => m.ModifierType)
-                .FirstOrDefault(x => x.Id == id);
-
-            if (dataChart == null)
-                return NotFound();
+            IModel dataChart = service.Get(id);
 
             return new ObjectResult(dataChart);
         }
 
 
         [HttpPost]
-        public IActionResult Post(CreateDataChart createDataChart)
+        public IActionResult Post([FromBody]CreateDataChart createDataChart)
         {
-            if (createDataChart == null)
-            {
-                return BadRequest();
-            }
-
             var chart = db.Charts.FirstOrDefault(data => data.Id == createDataChart.ChartId);
             var demandType = db.DemandTypes.FirstOrDefault(data => data.Id == createDataChart.DemandTypeId);
             var modifierType = db.ModifierTypes.FirstOrDefault(data => data.Id == createDataChart.ModifierTypeId);
@@ -75,10 +58,41 @@ namespace backend.Controllers
                 ModifierType = modifierType
             };
 
-            db.DataCharts.Add(dataChart);
-            db.SaveChanges();
+            service.Create(dataChart);
 
             return Ok(dataChart);
+        }
+
+
+
+
+
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            DataChart dataChart = db.DataCharts.FirstOrDefault(x => x.Id == id);
+
+            db.DataCharts.Remove(dataChart);
+            db.SaveChanges();
+            return Ok(dataChart);
+        }
+
+        [HttpDelete("{id}")]
+        [Route("DeleteDataChartsByIntervalSolution/{id}")]
+        public IActionResult DeleteDataChartsByIntervalSolution(int id)
+        {
+            IEnumerable<DataChart> dataCharts = db.DataCharts
+                .Where(d => d.Chart.Id == id);
+
+            foreach (DataChart d in dataCharts)
+            {
+                db.DataCharts.Remove(d);
+                db.SaveChanges();
+            }
+
+            return Ok(dataCharts);
         }
     }
 }

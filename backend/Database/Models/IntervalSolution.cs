@@ -2,7 +2,7 @@
 
 namespace backend.Database.Models
 {
-    public class IntervalSolution
+    public class IntervalSolution: IModel
     {
         [Key]
         public int Id { get; set; }

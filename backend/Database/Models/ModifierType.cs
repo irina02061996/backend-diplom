@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Database.Models
 {
-    public class ModifierType
+    public class ModifierType: IModel
     {
         [Key]
         public int Id { get; set; }

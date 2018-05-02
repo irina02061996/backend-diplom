@@ -1,40 +1,36 @@
 ﻿
 using System.Collections.Generic;
-using System.Linq;
 using backend.Database;
 using backend.Database.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     public class ChartsController : Controller
     {
+        IService service;
         ExpertChoiceContext db;
 
         public ChartsController(ExpertChoiceContext context)
         {
             this.db = context;
+            this.service = new ChartService(db);
         }
 
         [HttpGet]
-        public IEnumerable<Chart> Get()
+        public IEnumerable<IModel> Get()
         {
-            return db.Charts
-                 .Include(c => c.IntervalSolution)
-                 .ThenInclude(u => u.User)
-                 .ToList();
+            return service.GetAll();
         }
 
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            Chart chart = db.Charts
-                                .Include(c => c.IntervalSolution)
-                                .ThenInclude(u => u.User)
-                                .FirstOrDefault(x => x.Id == id);
+            IModel chart = service.Get(id);
+  
             if (chart == null)
                 return NotFound();
 

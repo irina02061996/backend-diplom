@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Database.Models
 {
-    public class DemandType
+    public class DemandType: IModel
     {
         [Key]
         public int Id { get; set; }

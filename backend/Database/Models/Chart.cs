@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Database.Models
 {
-    public class Chart
+    public class Chart: IModel
     {
         [Key]
         [ForeignKey("IntervalSolution")]

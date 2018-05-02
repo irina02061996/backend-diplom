@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using backend.Database;
 using backend.Database.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -11,26 +12,27 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class ModifierTypesController : Controller
     {
+        IService service;
         ExpertChoiceContext db;
 
         public ModifierTypesController(ExpertChoiceContext context)
         {
             this.db = context;
+            this.service = new ModifierTypeService(db);
         }
 
 
         [HttpGet]
-        public IEnumerable<ModifierType> Get()
+        public IEnumerable<IModel> Get()
         {
-            return db.ModifierTypes.ToList();
+            return service.GetAll();
         }
 
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            ModifierType modifierType = db.ModifierTypes.FirstOrDefault(x => x.Id == id);
-
+            IModel modifierType = service.Get(id);
             return new ObjectResult(modifierType);
         }
 
@@ -38,8 +40,7 @@ namespace backend.Controllers
         [HttpPost]
         public IActionResult Post(ModifierType modifierType)
         {
-            db.ModifierTypes.Add(modifierType);
-            db.SaveChanges();
+            service.Create(modifierType);
             return Ok(modifierType);
         }
     }

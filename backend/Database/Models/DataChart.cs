@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Database.Models
 {
-    public class DataChart
+    public class DataChart: IModel
     {
         [Key]
         public int Id { get; set; }
