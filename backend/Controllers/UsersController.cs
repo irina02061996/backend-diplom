@@ -39,16 +39,23 @@ namespace backend.Controllers
             return Ok(user);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            IModel user = service.Delete(id);
+            return Ok(user);
+        }
 
 
 
 
-       // [HttpGet]
-       // public async Task<IEnumerable<User>> Get()
-       // {
-       //     IEnumerable<User> users = await db.Users.ToListAsync();
-       //     return users;
-       // }
+
+        // [HttpGet]
+        // public async Task<IEnumerable<User>> Get()
+        // {
+        //     IEnumerable<User> users = await db.Users.ToListAsync();
+        //     return users;
+        // }
 
 
 

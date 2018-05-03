@@ -28,5 +28,13 @@ namespace backend.Services
             db.ModifierTypes.Add((ModifierType)model);
             db.SaveChanges();
         }
+
+        public override IModel Delete(int id)
+        {
+            ModifierType modifierType = db.ModifierTypes.FirstOrDefault(x => x.Id == id);
+            db.ModifierTypes.Remove(modifierType);
+            db.SaveChanges();
+            return modifierType;
+        }
     }
 }

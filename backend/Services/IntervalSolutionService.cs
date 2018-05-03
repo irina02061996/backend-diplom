@@ -31,6 +31,14 @@ namespace backend.Services
         {
             db.IntervalSolutions.Add((IntervalSolution)model);
             db.SaveChanges();
-        }      
+        }
+
+        public override IModel Delete(int id)
+        {
+            IntervalSolution intervalSolution = db.IntervalSolutions.FirstOrDefault(x => x.Id == id);
+            db.IntervalSolutions.Remove(intervalSolution);
+            db.SaveChanges();
+            return intervalSolution;
+        }
     }
 }

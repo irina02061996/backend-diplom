@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using backend.Database;
 using backend.Database.Models;
 using backend.Services;
@@ -35,6 +36,13 @@ namespace backend.Controllers
                 return NotFound();
 
             return new ObjectResult(chart);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            IModel chart = service.Delete(id);
+            return Ok(chart);
         }
     }
 }

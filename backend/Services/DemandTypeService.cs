@@ -29,5 +29,13 @@ namespace backend.Services
             db.DemandTypes.Add((DemandType)model);
             db.SaveChanges();
         }
+
+        public override IModel Delete(int id)
+        {
+            DemandType demandType = db.DemandTypes.FirstOrDefault(x => x.Id == id);
+            db.DemandTypes.Remove(demandType);
+            db.SaveChanges();
+            return demandType;
+        }
     }
 }

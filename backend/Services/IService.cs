@@ -16,5 +16,6 @@ namespace backend.Services
         abstract public IModel Get(int id);
         abstract public IEnumerable<IModel> GetAll();
         abstract public void Create(IModel model);
+        abstract public IModel Delete(int id);
     }
 }

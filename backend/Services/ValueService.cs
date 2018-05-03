@@ -44,5 +44,13 @@ namespace backend.Services
             db.Values.Add((Value)model);
             db.SaveChanges();
         }
+
+        public override IModel Delete(int id)
+        {
+            Value value = db.Values.FirstOrDefault(x => x.Id == id);
+            db.Values.Remove(value);
+            db.SaveChanges();
+            return value;
+        }
     }
 }

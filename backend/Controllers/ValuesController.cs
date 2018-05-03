@@ -59,35 +59,11 @@ namespace backend.Controllers
             return Ok(value);
         }
 
-
-
-
-
-
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            Value value = db.Values.FirstOrDefault(x => x.Id == id);
-
-            db.Values.Remove(value);
-            db.SaveChanges();
+            IModel value = service.Delete(id);
             return Ok(value);
-        }
-
-        [HttpDelete("{id}")]
-        [Route("DeleteValuesByDataChart/{id}")]
-        public IActionResult DeleteValuesByDataChart(int id)
-        {
-            IEnumerable<Value> values = db.Values
-                .Where(d => d.DataChart.Id == id);
-
-            foreach(Value v in values)
-            {
-                db.Values.Remove(v);
-                db.SaveChanges();
-            }
-
-            return Ok(values);
         }
     }
 }

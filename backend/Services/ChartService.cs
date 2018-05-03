@@ -34,5 +34,13 @@ namespace backend.Services
             db.Charts.Add((Chart)model);
             db.SaveChanges();
         }
+
+        public override IModel Delete(int id)
+        {
+            Chart chart = db.Charts.FirstOrDefault(x => x.Id == id);
+            db.Charts.Remove(chart);
+            db.SaveChanges();
+            return chart;
+        }
     }
 }

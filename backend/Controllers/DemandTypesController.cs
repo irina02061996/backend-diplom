@@ -39,5 +39,12 @@ namespace backend.Controllers
             service.Create(demandType);
             return Ok(demandType);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            IModel demandType = service.Delete(id);
+            return Ok(demandType);
+        }
     }
 }

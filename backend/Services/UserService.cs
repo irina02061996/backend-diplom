@@ -29,5 +29,13 @@ namespace backend.Services
             db.Users.Add((User)model);
             db.SaveChanges();
         }
+
+        public override IModel Delete(int id)
+        {
+            User user = db.Users.FirstOrDefault(x => x.Id == id);
+            db.Users.Remove(user);
+            db.SaveChanges();
+            return user;
+        }
     }
 }

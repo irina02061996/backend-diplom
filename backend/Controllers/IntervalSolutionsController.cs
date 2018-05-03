@@ -61,16 +61,10 @@ namespace backend.Controllers
         }
 
 
-
-
-
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            IntervalSolution intervalSolution = db.IntervalSolutions.FirstOrDefault(x => x.Id == id);
-            db.IntervalSolutions.Remove(intervalSolution);
-            db.SaveChanges();
-
+            IModel intervalSolution = service.Delete(id);
             return Ok(intervalSolution);
         }
     }
