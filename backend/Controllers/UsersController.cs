@@ -10,8 +10,8 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        IService service;
-        ExpertChoiceContext db;
+        private IService service;
+        private ExpertChoiceContext db;
 
         public UsersController(ExpertChoiceContext context)
         {
@@ -29,12 +29,20 @@ namespace backend.Controllers
         public IActionResult Get(int id)
         {
             IModel user = service.Get(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
             return new ObjectResult(user);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]User user)
+        public IActionResult Post([FromBody]IModel user)
         {
+            if (user == null)
+            {
+                return BadRequest();
+            }
             service.Create(user);
             return Ok(user);
         }
@@ -43,6 +51,10 @@ namespace backend.Controllers
         public IActionResult Delete(int id)
         {
             IModel user = service.Delete(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
             return Ok(user);
         }
 
@@ -64,7 +76,10 @@ namespace backend.Controllers
         public IActionResult GetUserByEmail(string email)
         {
             User user = db.Users.FirstOrDefault(x => x.Email == email);
-
+            if (user == null)
+            {
+                return NotFound();
+            }
             return new ObjectResult(user);
         }
 

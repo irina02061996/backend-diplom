@@ -15,7 +15,7 @@ namespace backend.Services
 
         public override IModel Get(int id)
         {
-            IModel user = db.Users.FirstOrDefault(x => x.Id == id);
+            User user = db.Users.FirstOrDefault(x => x.Id == id);
             return user;
         }
 
